@@ -22,6 +22,7 @@
         "source.fixAll.eslint": true,
         "source.organizeImports": true
     },
+    "editor.fontSize": 12,
     "explorer.confirmDelete": false,
     "explorer.confirmDragAndDrop": false,
     "window.dialogStyle": "custom",
