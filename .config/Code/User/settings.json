@@ -1,13 +1,11 @@
 {
-    // Visuals
-    "workbench.colorTheme": "Vitesse Dark",
     "workbench.productIconTheme": "icons-carbon",
     "workbench.iconTheme": "file-icons",
     "workbench.fontAliasing": "antialiased",
     "editor.fontLigatures": "'ss01', 'ss02', 'ss03', 'ss06', 'zero'",
     // Editor
     "editor.accessibilitySupport": "off",
-    "editor.cursorSmoothCaretAnimation": true,
+    "editor.cursorSmoothCaretAnimation": "on",
     "editor.find.addExtraSpaceOnTop": false,
     "editor.guides.bracketPairs": "active",
     "editor.inlineSuggest.enabled": true,
@@ -19,9 +17,10 @@
     "editor.unicodeHighlight.invisibleCharacters": true,
     "editor.codeActionsOnSave": {
         "source.fixAll": false,
-        "source.fixAll.eslint": true,
-        "source.organizeImports": true
+        "source.fixAll.eslint": false,
+        "source.organizeImports": false
     },
+    "editor.linkedEditing": true,
     "editor.fontSize": 12,
     "explorer.confirmDelete": false,
     "explorer.confirmDragAndDrop": false,
@@ -37,12 +36,13 @@
     "workbench.tree.indent": 25,
     "workbench.list.smoothScrolling": true,
     "workbench.sideBar.location": "right",
+    "workbench.editor.enablePreview": false,
+    "workbench.editor.enablePreviewFromQuickOpen": false,
     "extensions.autoUpdate": "onlyEnabledExtensions",
     "extensions.ignoreRecommendations": true,
     "files.eol": "\n",
     "files.insertFinalNewline": true,
     "files.simpleDialog.enable": true,
-    "files.autoSave": "afterDelay",
     "git.autofetch": true,
     "git.confirmSync": false,
     "git.untrackedChanges": "separate",
@@ -107,9 +107,51 @@
     "volar.codeLens.pugTools": false,
     "volar.codeLens.scriptSetupTools": true,
     "volar.completion.preferredTagNameCase": "pascal",
-    "customizeUI.activityBar": "top",
-    "customizeUI.activityBarHideSettings": true,
-    "customizeUI.titleBar": "frameless",
     "editor.minimap.enabled": false,
-    "window.menuBarVisibility": "toggle"
+    "window.menuBarVisibility": "toggle",
+    "projectManager.tags": [
+        "tswp",
+        "plugin",
+        "mod",
+        "personal"
+    ],
+    "redhat.telemetry.enabled": false,
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[yaml]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "tabnine.experimentalAutoImports": true,
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[vue]": {
+        "editor.defaultFormatter": "Vue.volar"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "terminal.integrated.env.osx": {
+        "FIG_NEW_SESSION": "1"
+    },
+    "window.nativeTabs": true,
+    "workbench.startupEditor": "none",
+    "projectManager.openInNewWindowWhenClickingInStatusBar": true,
+    "[scss]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "Vue.volar"
+    },
+    "git.ignoreRebaseWarning": true,
+    "vitest.enable": true,
+    "typescript.preferences.importModuleSpecifier": "relative",
+    "[java]": {
+        "editor.suggest.snippetsPreventQuickSuggestions": false
+    },
+    "boot-java.rewrite.reconcile": true
 }
