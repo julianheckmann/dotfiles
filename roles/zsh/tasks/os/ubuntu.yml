@@ -41,3 +41,9 @@
     mode: "0644"
     force: true
   become: true
+
+- name: "zsh :: ubuntu :: set zsh as default shell"
+  ansible.builtin.user:
+    name: "{{ ansible_env['USER'] }}"
+    shell: /usr/bin/zsh
+  become: true
