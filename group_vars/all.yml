@@ -4,3 +4,4 @@ default_roles:
   - zsh
   - docker
   - nvim
+  - nvm
