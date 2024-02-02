@@ -1,8 +1,13 @@
 ---
+- name: "nvim :: ubuntu :: add neovim ppa"
+  ansible.builtin.apt_repository:
+    repo: "ppa:neovim-ppa/stable"
+    state: present
+    update_cache: yes
+  become: true
+
 - name: "nvim :: ubuntu :: install neovim"
-  ansible.builtin.get_url:
-    url: "https://github.com/neovim/neovim/releases/latest/download/nvim.appimage"
-    dest: "/usr/bin/nvim.appimage"
-    mode: "0755"
-    force: true
+  ansible.builtin.apt:
+    name: neovim
+    state: present
   become: true
