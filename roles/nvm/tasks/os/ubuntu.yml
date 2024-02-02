@@ -1,7 +1,7 @@
 ---
 - name: "nvm :: ubuntu :: detect nvm"
   ansible.builtin.stat:
-    path: "/home/{{ ansible_user }}/.nvm"
+    path: "/home/{{ ansible_user_id }}/.nvm"
   register: nvmpath
 
 - name: "nvm :: ubuntu :: register nvm_is_installed"
