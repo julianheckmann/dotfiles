@@ -5,3 +5,4 @@
     dest: "/usr/bin/nvim.appimage"
     mode: "0755"
     force: true
+  become: true
