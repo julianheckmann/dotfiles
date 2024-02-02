@@ -32,3 +32,12 @@
     - name: "zsh :: run oh-my-zsh install script"
       ansible.builtin.script:
         cmd: /{{ ansible_user_dir }}/install-oh-my-zsh.sh
+
+
+- name: "zsh :: copy .zshrc"
+  ansible.builtin.template:
+    src: .zshrc
+    dest: "{{ ansible_user_dir }}/.zshrc"
+    mode: "0644"
+    force: true
+  become: true
