@@ -44,13 +44,6 @@
     state: present
   become: true
 
-- name: "docker :: ubuntu :: add user to docker group"
-  ansible.builtin.user:
-    name: "{{ ansible_user }}"
-    groups: docker
-    append: yes
-  become: true
-
 - name: "docker :: ubuntu :: enable docker service"
   ansible.builtin.service:
     name: docker
