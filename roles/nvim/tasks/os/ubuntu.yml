@@ -14,12 +14,12 @@
 
 - name: "nvim :: ubuntu :: clean neovim"
   ansible.builtin.file:
-    path: ~/.config/nvim
+    path: /home/{{ ansible_user_id }}/lazyvim
     state: absent
   become: true
 
 - name: "nvim :: ubuntu :: clone lazy vim"
   ansible.builtin.git:
-    dest: ~/.config/nvim
+    dest: /home/{{ ansible_user_id }}/lazyvim
     repo: https://github.com/LazyVim/starter
   become: true
