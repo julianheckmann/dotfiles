@@ -1,0 +1,4 @@
+---
+- name: "tmux :: run ubuntu"
+  ansible.builtin.import_tasks: os/ubuntu.yml
+  when: ansible_os_family == "Debien"
