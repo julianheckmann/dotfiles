@@ -8,6 +8,6 @@
   become: true
 
 - name: "nvm :: ubuntu :: run nvm install script"
-  ansible.builtin.shell:
-    cmd: bash /{{ ansible_user_dir }}/install-nvm.sh
+  ansible.builtin.shell: |
+   bash /{{ ansible_user_dir }}/install-nvm.sh
   become: true
