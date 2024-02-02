@@ -1,0 +1,35 @@
+---
+- name: "system:manjaro:dependencies"
+  community.general.pacman:
+    name:
+      - jq
+      - curl
+    state: present
+  become: true
+
+# - name: "system:manjaro:copy-zshrc"
+#   ansible.builtin.copy:
+#     src: ".zshrc"
+#     dest: "/home/{{ ansible_user_id }}/.zshrc"
+#     mode: "0644"
+#   become: true
+
+- name: "system :: set sudo"
+  ansible.builtin.template:
+    src: user-sudo.j2
+    dest: "/etc/sudoers.d/{{ ansible_env['USER'] }}"
+    mode: "0644"
+  become: true
+
+- name: "system :: ensuring group exist for current user"
+  ansible.builtin.group:
+    name: "{{ host_user }}"
+    state: present
+  become: true
+
+- name: "system :: ensure user is in group {{ host_user }}"
+  ansible.builtin.user:
+    name: "{{ host_user }}"
+    groups: "{{ host_user }}"
+    append: true
+  become: true

@@ -1,0 +1,219 @@
+#!/usr/bin/env bash
+
+NC='\033[0m'
+GREEN='\033[00;32m'
+CYAN='\033[00;36m'
+SEA='\033[38;5;49m'
+LBLACK='\033[01;30m'
+LRED='\033[01;31m'
+LGREEN='\033[01;32m'
+OVERWRITE='\e[1A\e[K'
+CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
+ARROW="${SEA}\xE2\x96\xB6${NC}"
+
+CONFIG_DIR="${HOME}/.config/dotfiles"
+VAULT_SECRET="${HOME}/.ansible-vault/vault.secret"
+DOTFILES_DIR="${HOME}/.dotfiles"
+SSH_DIR="${HOME}/.ssh"
+IS_FIRST_RUN="${HOME}/.dotfiles_run"
+DOTFILES_LOG="${HOME}/.dotfiles.log"
+REPO="https://github.com/julianheckmann/dotfiles"
+
+OS=$(uname -s)
+
+function _task {
+	# if _task is called while a task was set, complete the previous
+	if [[ ${TASK} != "" ]]; then
+		# shellcheck disable=SC2059
+		printf "${OVERWRITE}${LGREEN}  [✓]  ${LGREEN}${TASK}\n"
+	fi
+
+	# set new task title and print
+	TASK=$1
+
+	# shellcheck disable=SC2059
+	printf "${OVERWRITE}${LBLACK}  [ ]  ${TASK}${LRED}"
+}
+
+function _clear_task {
+	TASK=""
+}
+
+function _task_done {
+	# shellcheck disable=SC2059
+	printf "${OVERWRITE}${LGREEN}  [✓]  ${LGREEN}${TASK}\n"
+	_clear_task
+}
+
+function _cmd {
+	# create log if it doesn't exist
+	if ! [[ -f ${DOTFILES_LOG} ]]; then
+		touch "${DOTFILES_LOG}"
+	fi
+
+	# empty log file
+	truncate -s 0 "${DOTFILES_LOG}"
+
+	# hide stdout, on error we print and exit
+	if eval "$1" 1>/dev/null 2>"${DOTFILES_LOG}"; then
+		return 0 # success
+	fi
+
+	# read error from log and add spacing
+	# shellcheck disable=SC2059
+	printf "${OVERWRITE}${LRED}  [X]  ${TASK}${LRED}\n"
+
+	while read -r line; do
+		printf "      %s\n" "${line}"
+	done <"${DOTFILES_LOG}"
+	printf "\n"
+
+	# remove log file
+	rm "${DOTFILES_LOG}"
+
+	# exit installation
+	exit 1
+}
+
+function clone_or_update_repo {
+	# If dotfiles is not installed
+	if ! [[ -d ${DOTFILES_DIR} ]]; then
+		# Cloning dotfiles
+		_task "Cloning dotfiles"
+		_cmd "git clone --quiet ${REPO} ${DOTFILES_DIR}"
+	else
+		# Updating dotfiles
+		_task "Updating dotfiles"
+		_cmd "cd ${DOTFILES_DIR} && git pull --quiet"
+	fi
+}
+
+function first_run {
+	if ! [[ -f ${IS_FIRST_RUN} ]]; then
+		echo -e "${CHECK_MARK} ${GREEN}First run complete!${NC}"
+		echo -e "${ARROW} ${CYAN}Please reboot your computer to complete the setup.${NC}"
+		touch "${IS_FIRST_RUN}"
+	fi
+}
+
+function update_ansible_galaxy {
+	_task "Updating ansible-galaxy"
+	_cmd "ansible-galaxy install -r ${DOTFILES_DIR}/requirements.yml"
+}
+
+function run_ansible_playbook {
+	_task "Running ansible playbook"
+	_task_done
+	ansible-playbook "${DOTFILES_DIR}/main.yml" "$@"
+}
+
+function manjaro {
+	# If ansible is not installed
+	# shellcheck disable=SC2312
+	if ! [[ -x "$(command -v ansible)" ]]; then
+		# Installing ansible
+		_task "Installing ansible"
+		_cmd "sudo pacman -S ansible --noconfirm"
+	fi
+
+	# If git is not installed
+	# shellcheck disable=SC2312
+	if ! [[ -x "$(command -v git)" ]]; then
+		# Installing git
+		_task "Installing git"
+		_cmd "sudo pacman -S git --noconfirm"
+	fi
+
+	# clone or update dotfile repo
+	clone_or_update_repo
+
+	# update ansible-galaxy
+	update_ansible_galaxy
+
+	# run ansible playbook
+	run_ansible_playbook "$@"
+
+	# first run notice and flag
+	first_run
+}
+
+function ubuntu {
+	# If ansible is not installed
+	# shellcheck disable=SC2312
+	if ! [[ -x "$(command -v ansible)" ]]; then
+		# Installing ansible
+		_task "Installing ansible"
+		_cmd "sudo apt update"
+		_cmd "sudo apt install software-properties-common --noconfirm"
+		_cmd "sudo apt-add-repository --yes --update ppa:ansible/ansible"
+		_cmd "sudo apt install ansible --noconfirm"
+	fi
+
+	# If git is not installed
+	# shellcheck disable=SC2312
+	if ! [[ -x "$(command -v git)" ]]; then
+		# Installing git
+		_task "Installing git"
+		_cmd "sudo apt-get install git --noconfirm"
+	fi
+
+	# clone or update dotfile repo
+	clone_or_update_repo
+
+	# update ansible-galaxy
+	update_ansible_galaxy
+
+	# run ansible playbook
+	run_ansible_playbook "$@"
+
+	# first run notice and flag
+	first_run
+}
+
+function mac {
+	# If ansible is not installed
+	# shellcheck disable=SC2312
+	if ! [[ -x "$(command -v ansible)" ]]; then
+		# Installing ansible
+		_task "Installing ansible"
+		_cmd "brew install ansible"
+	fi
+
+	# If git is not installed
+	# shellcheck disable=SC2312
+	if ! [[ -x "$(command -v git)" ]]; then
+		# Installing git
+		_task "Installing git"
+		_cmd "brew install git"
+	fi
+
+	# clone or update dotfile repo
+	clone_or_update_repo
+
+	# update ansible-galaxy
+	update_ansible_galaxy
+
+	# run ansible playbook
+	run_ansible_playbook "$@"
+
+	# first run notice and flag
+	first_run
+}
+
+if [[ ${OS} == "Darwin" ]]; then
+	mac "$@"
+	exit
+fi
+
+if [[ ${OS} != "Linux" ]]; then
+	echo "Unsupported OS ${OS}. Exiting."
+	exit
+fi
+
+. /etc/os-release
+
+case ${ID} in
+manjaro) manjaro "$@" ;;
+ubuntu) ubuntu "$@" ;;
+*) echo "Unsupported OS ${ID}. Exiting." ;;
+esac
