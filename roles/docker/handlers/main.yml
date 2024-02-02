@@ -1,0 +1,7 @@
+---
+- name: "docker :: ubuntu :: clean up install docker desktop"
+  ansible.builtin.file:
+    path: "{{ ansible_user_dir }}/docker-desktop.deb"
+    state: absent
+
+
