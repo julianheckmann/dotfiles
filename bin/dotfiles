@@ -154,7 +154,7 @@ function ubuntu {
 	if ! [[ -x "$(command -v git)" ]]; then
 		# Installing git
 		_task "Installing git"
-		_cmd "sudo apt-get install git --noconfirm"
+		_cmd "sudo apt-get install git --yes"
 	fi
 
 	# clone or update dotfile repo
