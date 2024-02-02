@@ -143,10 +143,10 @@ function ubuntu {
 	if ! [[ -x "$(command -v ansible)" ]]; then
 		# Installing ansible
 		_task "Installing ansible"
-		_cmd "sudo apt update"
-		_cmd "sudo apt install software-properties-common --noconfirm"
+		_cmd "sudo apt update --yes"
+		_cmd "sudo apt install software-properties-common --yes"
 		_cmd "sudo apt-add-repository --yes --update ppa:ansible/ansible"
-		_cmd "sudo apt install ansible --noconfirm"
+		_cmd "sudo apt install ansible --yes"
 	fi
 
 	# If git is not installed
