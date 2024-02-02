@@ -13,7 +13,7 @@
   become: true
 
 - name: "nvim :: ubuntu :: clone lazy vim"
-  ansible.builtin.shell: |
-    git clone https://github.com/LazyVim/starter ~/.config/nvim
-    rm -rf ~/.config/nvim/.git
+  ansible.builtin.git:
+    dest: ~/.config/nvim
+    repo: https://github.com/LazyVim/starter
   become: true
