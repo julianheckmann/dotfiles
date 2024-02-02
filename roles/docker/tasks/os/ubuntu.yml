@@ -53,7 +53,7 @@
 
 - name: "zsh :: detect docker desktop"
   ansible.builtin.stat:
-    path: "/usr/bin/docker-desktop"
+    path: "/usr/bin/docker-credential-desktop"
   register: dockerdesktoppath
 
 - name: "zsh :: register dockerdesktop_is_installed"
