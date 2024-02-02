@@ -1,5 +1,5 @@
 ---
-- name: "zsh :: clean up install oh-my-zsh"
+- name: "zsh :: ubuntu :: clean up install oh-my-zsh"
   ansible.builtin.file:
     path: /{{ ansible_user_dir }}/oh-my-bash.install.sh
     state: absent
