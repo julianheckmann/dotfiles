@@ -12,6 +12,12 @@
     state: present
   become: true
 
+- name: "nvim :: ubuntu :: clean neovim"
+  ansible.builtin.file:
+    path: ~/.config/nvim
+    state: absent
+  become: true
+
 - name: "nvim :: ubuntu :: clone lazy vim"
   ansible.builtin.git:
     dest: ~/.config/nvim
