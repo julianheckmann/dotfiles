@@ -1,11 +1,4 @@
 ---
-- name: "system :: update and upgrade apt repos and packages"
-  ansible.builtin.apt:
-    update_cache: true
-    upgrade: full
-    state: latest
-  become: true
-
 - name: "system :: install apt packages"
   ansible.builtin.apt:
     name:
