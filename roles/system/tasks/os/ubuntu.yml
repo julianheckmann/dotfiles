@@ -4,8 +4,6 @@
     update_cache: true
     upgrade: full
     state: latest
-    autoremove: true
-    autoclean: true
   become: true
 
 - name: "system :: install apt packages"
