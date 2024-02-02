@@ -3,3 +3,4 @@ default_roles:
   - bat
   - zsh
   - docker
+  - nvim
