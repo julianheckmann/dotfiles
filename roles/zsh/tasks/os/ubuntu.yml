@@ -1,0 +1,33 @@
+---
+- name: "zsh :: install zsh"
+  ansible.builtin.apt:
+    name: zsh
+    state: present
+
+- name: "zsh :: detect oh-my-zsh"
+  ansible.builtin.stat:
+    path: "{{ ansible_user_dir }}/.oh-my-zsh"
+  register: ohmyzsh
+
+- name: "zsh :: register ohmyzsh_is_installed"
+  ansible.builtin.set_fact:
+    ohmyzsh_is_installed: "{{ ohmyzsh.stat.exists }}"
+
+- name: "zsh :: debug ohmyzsh_is_installed"
+  ansible.builtin.debug:
+    var: ohmyzsh_is_installed
+
+- name: "zsh :: install oh-myzsh"
+  when: not ohmyzsh_is_installed
+  block:
+    - name: "zsh :: download oh-my-zsh install script"
+      ansible.builtin.get_url:
+        url: "https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh"
+        dest: "{{ ansible_user_dir }}/install-oh-my-zsh.sh"
+        mode: "0755"
+        force: true
+      notify: "zsh :: clean up install oh-my-zsh"
+
+    - name: "zsh :: run oh-my-zsh install script"
+      ansible.builtin.script:
+        cmd: /{{ ansible_user_dir }}/install-oh-my-zsh.sh
