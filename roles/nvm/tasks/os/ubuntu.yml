@@ -1,4 +1,14 @@
 ---
+- name: "nvm :: ubuntu :: detect nvm"
+  ansible.builtin.stat:
+    path: "/home/{{ ansible_user }}/.nvm"
+  register: nvmpath
+
+- name: "nvm :: ubuntu :: register nvm_is_installed"
+  ansible.builtin.set_fact:
+    nvm_is_installed: "{{ nvmpath.stat.exists }}"
+
 - name: "nvm :: ubuntu :: run nvm install script"
   ansible.builtin.shell: |
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+  when: not nvm_is_installed
