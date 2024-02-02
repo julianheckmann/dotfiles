@@ -7,7 +7,21 @@
     state: present
   become: true 
 
+- name: "zsh :: detect docker"
+  ansible.builtin.stat:
+    path: "/usr/bin/docker"
+  register: dockerpath
+
+- name: "zsh :: register docker_is_installed"
+  ansible.builtin.set_fact:
+    docker_is_installed: "{{ dockerpath.stat.exists }}"
+
+- name: "zsh :: debug docker_is_installed"
+  ansible.builtin.debug:
+    var: docker_is_installed
+
 - name: "docker :: ubuntu :: add docker repository"
+  when: not docker_is_installed
   ansible.builtin.shell: |
     sudo install -m 0755 -d /etc/apt/keyrings
     sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
