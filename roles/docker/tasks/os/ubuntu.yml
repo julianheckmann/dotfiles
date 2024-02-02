@@ -64,18 +64,19 @@
   ansible.builtin.debug:
     var: dockerdesktop_is_installed
 
-- name: "docker :: ubuntu :: download docker"
+- name: "docker :: ubuntu :: install docker desktop"
   when: not dockerdesktop_is_installed
   block:
-    - name: "docker :: ubuntu :: download docker"
+    - name: "docker :: ubuntu :: download docker desktop"
       ansible.builtin.get_url:
         url: "https://desktop.docker.com/linux/main/amd64/136059/docker-desktop-4.27.1-amd64.deb"
-        dest: "{{ansible_user_dir}}/docker-desktop.deb"
+        dest: "{{ ansible_user_dir }}/docker-desktop.deb"
         mode: "0755"
         force: true
       become: true
+      notify: "docker :: ubuntu :: clean up install docker desktop"
 
-    - name: "docker :: ubuntu :: run docker"
+    - name: "docker :: ubuntu :: install docker desktop"
       ansible.builtin.shell: |
         sudo apt install -y "{{ansible_user_dir}}/docker-desktop.deb"
   become: true
