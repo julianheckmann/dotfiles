@@ -14,10 +14,10 @@
 
 - name: "nvim :: ubuntu :: back up existing neovim configuration"
   ansible.builtin.shell: |
-    mv ~/.config/nvim{,.bak}
-    mv ~/.local/share/nvim{,.bak}
-    mv ~/.local/state/nvim{,.bak}
-    mv ~/.cache/nvim{,.bak}
+    [ -f ~/.config/nvim ] && mv ~/.config/nvim{,.bak}
+    [ -f ~/.local/share/nvim ] && mv ~/.local/share/nvim{,.bak}
+    [ -f ~/.local/state/nvim ] && mv ~/.local/state/nvim{,.bak}
+    [ -f ~/.cache/nvim ] && mv ~/.cache/nvim{,.bak}
   become: true
 
 - name: "nvim :: ubuntu :: clone lazy vim"
