@@ -214,6 +214,6 @@ fi
 
 case ${ID} in
 manjaro) manjaro "$@" ;;
-ubuntu) ubuntu "$@" ;;
+ubuntu|pop) ubuntu "$@" ;;
 *) echo "Unsupported OS ${ID}. Exiting." ;;
 esac
