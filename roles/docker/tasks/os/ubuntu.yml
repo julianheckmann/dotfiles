@@ -5,7 +5,7 @@
       - ca-certificates
       - curl
     state: present
-  become: true 
+  become: true
 
 - name: "zsh :: detect docker"
   ansible.builtin.stat:
@@ -42,4 +42,47 @@
       - docker-buildx-plugin
       - docker-compose-plugin
     state: present
+  become: true
+
+- name: "docker :: ubuntu :: add user to docker group"
+  ansible.builtin.user:
+    name: "{{ ansible_user }}"
+    groups: docker
+    append: yes
+  become: true
+
+- name: "docker :: ubuntu :: enable docker service"
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: yes
+  become: true
+
+- name: "zsh :: detect docker desktop"
+  ansible.builtin.stat:
+    path: "/usr/bin/docker-desktop"
+  register: dockerdesktoppath
+
+- name: "zsh :: register dockerdesktop_is_installed"
+  ansible.builtin.set_fact:
+    dockerdesktop_is_installed: "{{ dockerdesktoppath.stat.exists }}"
+
+- name: "zsh :: debug dockerdesktop_is_installed"
+  ansible.builtin.debug:
+    var: dockerdesktop_is_installed
+
+- name: "docker :: ubuntu :: download docker"
+  when: not dockerdesktop_is_installed
+  block:
+    - name: "docker :: ubuntu :: download docker"
+      ansible.builtin.get_url:
+        url: "https://desktop.docker.com/linux/main/amd64/136059/docker-desktop-4.27.1-amd64.deb"
+        dest: "{{ansible_user_dir}}/docker-desktop.deb"
+        mode: "0755"
+        force: true
+      become: true
+
+    - name: "docker :: ubuntu :: run docker"
+      ansible.builtin.shell: |
+        sudo apt install -y "{{ansible_user_dir}}/docker-desktop.deb"
   become: true
