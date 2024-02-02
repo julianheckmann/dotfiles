@@ -1,7 +1,4 @@
 ---
-- name: "tmux:run-arch"
-  ansible.builtin.import_tasks: os/manjaro.yml
-  when: ansible_os_family == "Archlinux"
-- name: "tmux:run-mac"
-  ansible.builtin.import_tasks: os/mac.yml
-  when: ansible_os_family == "Darwin"
+- name: "docker :: run ubuntu"
+  ansible.builtin.import_tasks: os/ubuntu.yml
+  when: ansible_os_family == "Debian"
